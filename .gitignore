@@ -1,0 +1,18 @@
+# Build output
+build/
+
+# ESP-IDF config generado automáticamente
+sdkconfig.old
+
+# Dependencias manejadas por ESP-IDF component manager
+managed_components/
+
+# Archivos del sistema
+.DS_Store
+*~
+*.swp
+*.swo
+
+# Emacs
+\#*\#
+.\#*
