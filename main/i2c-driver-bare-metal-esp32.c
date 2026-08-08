@@ -8,6 +8,7 @@
  */
 
 #include "bmp280.h"
+#include "mpu6050.h"
 #include "driver/i2c_master.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -34,26 +35,45 @@ void app_main(void)
 
   ESP_ERROR_CHECK(i2c_new_master_bus(&bus_cfg, &bus_handle));
   ESP_LOGI(TAG, "I2C busus initialized");
-
+  
   // initialize bmp280
-  bmp280_config_t config = BMP280_DEFAULT_CONFIG;
-  ESP_ERROR_CHECK(bmp280_init(bus_handle, &config));
+  bmp280_config_t bmp_config = BMP280_DEFAULT_CONFIG;
+  ESP_ERROR_CHECK(bmp280_init(bus_handle, &bmp_config));
+
+  vTaskDelay(pdMS_TO_TICKS(100));
+
+  // initialize mpu6050
+  mpu6050_config_t mpu_config = MPU6050_DEFAULT_CONFIG;
+  ESP_ERROR_CHECK(mpu6050_init(bus_handle, &mpu_config));
 
   // Read data
-  bmp280_data_t data;
+  bmp280_data_t bmp_data;
+  mpu6050_data_t mpu_data;
 
 
   while(1)
   {
-    esp_err_t ret = bmp280_read(&data);
-    
+    // bmp280 - temperature and pressure
+    esp_err_t ret = bmp280_read(&bmp_data);
     if (ret == ESP_OK)
     {
        ESP_LOGI(TAG, "Temperature: %.2f C  Pressure: %.2f hPa",
-                data.temperature,data.pressure);
+                bmp_data.temperature,bmp_data.pressure);
     } else {
       ESP_LOGE(TAG, "Failed to read sensor: %s",
                esp_err_to_name(ret));
+    }
+
+    // mpu6050 - accelerometer, gyroscope and temperature
+    ret = mpu6050_read(&mpu_data);
+    if (ret == ESP_OK) {
+      ESP_LOGI(TAG, "MPU6050 - Accel: X=%.2f Y=%.2f Z=%.2f g",
+               mpu_data.accel_x, mpu_data.accel_y, mpu_data.accel_z);
+      ESP_LOGI(TAG, "MPU6050 - Gyro:  X=%.2f Y=%.2f Z=%.2f °/s",
+               mpu_data.gyro_x, mpu_data.gyro_y, mpu_data.gyro_z);
+      ESP_LOGI(TAG, "MPU6050 - Temp: %.2f C", mpu_data.temp);
+    } else {
+      ESP_LOGE(TAG, "MPU6050 read failed: %s", esp_err_to_name(ret));
     }
 
     vTaskDelay(pdMS_TO_TICKS(1000));

@@ -25,7 +25,6 @@
  *  bmp280_config_t config = BMP280_DEFAULT_CONFIG;
  *  bmp280_init(bus_handle, &config);
  */
-
 #define BMP280_DEFAULT_CONFIG {       \
   .i2c_addr = BMP280_I2C_ADDR_PRIMARY,\
   .osrs_t = BMP280_OSRS_X1,           \

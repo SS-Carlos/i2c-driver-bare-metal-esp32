@@ -1,5 +1,4 @@
-/*
- * BMP280 Driver for ESP32
+/* BMP280 Driver for ESP32
  * Copyright (c) 2026 Carlos Solano
  *
  * SPDX-License-Identifier: MIT
@@ -18,8 +17,8 @@ typedef uint32_t BMP280_U32_T;
 typedef int64_t  BMP280_S64_T;
 
 // I2C directions
-#define BMP280_I2C_ADDR_PRIMARY   0x76
-#define BMP280_I2C_ADDR_SECUNDARY 0X77
+#define BMP280_I2C_ADDR_PRIMARY      0x76
+#define BMP280_I2C_ADDR_SECUNDARY    0X77
 
 // Registers
 #define BMP280_REG_CALIB_START       0x88

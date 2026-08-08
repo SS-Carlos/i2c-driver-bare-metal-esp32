@@ -3,6 +3,7 @@ idf_component_register(
   INCLUDE_DIRS "."
   REQUIRES
     bmp280
+    mpu6050
     esp_driver_i2c
     freertos
 )
