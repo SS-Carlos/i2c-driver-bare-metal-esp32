@@ -1,5 +1,4 @@
-/*
- * MPU6050 Driver for ESP32
+/* MPU6050 Driver for ESP32
  * Copyright (c) 2026 Carlos Solano
  *
  * SPDX-License-Identifier: MIT

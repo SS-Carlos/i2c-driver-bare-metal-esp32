@@ -4,6 +4,7 @@ idf_component_register(
   REQUIRES
     bmp280
     mpu6050
+    sht30
     esp_driver_i2c
     freertos
 )

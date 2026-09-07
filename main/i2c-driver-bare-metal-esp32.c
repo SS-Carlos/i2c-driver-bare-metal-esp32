@@ -9,6 +9,7 @@
 
 #include "bmp280.h"
 #include "mpu6050.h"
+#include "sht30.h"
 #include "driver/i2c_master.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -46,9 +47,15 @@ void app_main(void)
   mpu6050_config_t mpu_config = MPU6050_DEFAULT_CONFIG;
   ESP_ERROR_CHECK(mpu6050_init(bus_handle, &mpu_config));
 
+  vTaskDelay(pdMS_TO_TICKS(100));
+
+  sht30_config_t sht_config = SHT30_DEFAULT_CONFIG;
+  ESP_ERROR_CHECK(sht30_init(bus_handle, &sht_config));
+
   // Read data
-  bmp280_data_t bmp_data;
+  bmp280_data_t  bmp_data;
   mpu6050_data_t mpu_data;
+  sht30_data_t   sht_data;
 
 
   while(1)
@@ -74,6 +81,14 @@ void app_main(void)
       ESP_LOGI(TAG, "MPU6050 - Temp: %.2f C", mpu_data.temp);
     } else {
       ESP_LOGE(TAG, "MPU6050 read failed: %s", esp_err_to_name(ret));
+    }
+
+    ret = sht30_read(&sht_data);
+    if (ret == ESP_OK) {
+      ESP_LOGI(TAG, "SHT30 - Temp: %.2f C Humidity: %.2f %%", 
+               sht_data.temperature, sht_data.humidity);
+    } else {
+      ESP_LOGE(TAG, "SHT30 Read failed: %s", esp_err_to_name(ret));
     }
 
     vTaskDelay(pdMS_TO_TICKS(1000));
