@@ -61,9 +61,11 @@
 #define SHT30_CMD_READ_STATUS             0xF32D
 #define SHT30_CMD_CLEAR_STATUS_REGISTER   0x3041
 
-// Measurement duration in ms — datasheet section 2.1
-// Used for vTaskDelay after sending measurement command
-#define SHT30_MEAS_DURATION_HIGH          15  // ms
+// Measurement durations — set to 30ms to account for:
+// 1. FreeRTOS tick resolution (10ms per tick at default 100Hz)
+// 2. Manufacturing variation in some SHT30 modules
+// Datasheet spec: 15ms (high), tested minimum: 25-30ms
+#define SHT30_MEAS_DURATION_HIGH          30  // ms
 #define SHT30_MEAS_DURATION_MEDIUM        6   // ms
 #define SHT30_MEAS_DURATION_LOW           4   // ms
 
