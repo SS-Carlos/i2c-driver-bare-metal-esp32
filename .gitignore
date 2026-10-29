@@ -8,6 +8,7 @@ sdkconfig.old
 managed_components/
 
 # Archivos del sistema
+.direnv/
 .DS_Store
 *~
 *.swp
